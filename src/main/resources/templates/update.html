@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Update Page</title>
+</head>
+<body>
+<h3>-- Update Products --</h3>
+    <div class="container">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Product Name</span>
+            </div>
+            <input id="name" type="text" class="form-control" placeholder="Name" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        
+         <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Product Category</span>
+            </div>
+            <input id="category" type="text" class="form-control" placeholder="Category" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        
+      
+        
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Product Price</span>
+            </div>
+            <input id="price" type="number" class="form-control" placeholder="Price" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Expiry Date</span>
+            </div>
+            <input id="date" type="date" class="form-control" placeholder="Date" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        
+        
+        <div class="input-group mb-3">
+          
+            <button id="productupdate" class="btn btn-primary" onclick="updateProduct()">Update Product</button>
+        </div>
+       
+    </div>
+
+</body>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+function updateProduct()
+{
+	var parts=window.location.search.substr(1).split("=");
+	var id=parts[1];
+	console.log(id);
+	console.log("Updating the product with id : ",id);
+	var url= 'api/products/' + id;
+
+	
+	$("#productupdate").click(()=>{
+		console.log($('#name').val())
+		var product = {name:$('#name').val(),category: $('#category').val(), price:$('#price').val(),date:$('#date').val() }
+		console.log(product);
+		
+		/* $.post("api/courses",
+				  course,
+				  function(data, status){
+				    alert("Data: " + data + "\nStatus: " + status);
+				  }); */
+		$.ajax({
+			  url: url,
+			  method: 'PUT',
+	  		dataType: 'json',
+	        contentType: 'application/json',
+			  data: JSON.stringify(product)
+			}).done(function() {
+			 console.log('Product updated!!')
+			 alert('Product updated!!');
+			}); 
+	})
+	}
+</script>
+
+
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>-- Display Products --</h3>
+    <div class="container">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Search Products</span>
+            </div>
+            <input id="searchText" type="text" class="form-control" placeholder="By Name" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        <div id="display" class="row"></div>
+    </div>
+    
+     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+    <script>
+    var data = [];
+    
+    function deleteProduct(id){
+    	console.log('deleting Product with id: ', id);
+    	var url = 'api/products/' + id;
+    	$.ajax({
+    		  url: url,
+    		  method: 'DELETE'
+    		}).done(function() {
+    		 console.log('deletion done')
+    		 alert('Product deleted');
+    		});
+    }
+    
+    function render(result) {
+        $.each(result, function (i, field) {
+            console.log(i, field)
+            var template = `
+        <div class="card" style="width: 18rem;">
+            <img src="https://via.placeholder.com/150" class="card-img-top" alt="image for product"/>
+            <div class="card-body">
+            <h5 class="card-title">${field.name}</h5>
+            <p class="card-text">Price: ${field.price}</p>
+            <p class="card-text">Category: ${field.category}</p>
+            <p class="card-text">Expiry Date: ${field.date}</p>
+            <div class="input-group mb-3">
+            
+            <button onclick="window.location.href='buy.html'">Buy Now</button>
+        </div>
+       
+            </div>
+        </div>
+        `
+            // console.log(template)
+            $("#display").append(template + " ");
+        })
+    }
+    
+    
+    $(document).ready(function () {
+        console.log("ready!");
+        $("#searchText").keyup(() => {
+            console.log('keyup event', $("#searchText").val())
+            var filteredList = data.filter((element)=> element.name.startsWith($("#searchText").val()))
+            console.log(filteredList)
+            $( "#display" ).empty();
+            render(filteredList);
+        })
+        
+        $.getJSON("api/products/", function (result) {
+            console.log(result)
+            data = result;
+            render(result)
+
+        });
+
+
+    });
+
+</script>   
+
+
+</body>
+</html>
